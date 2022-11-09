@@ -7,6 +7,7 @@ childPipelines:
     startAll: true
 
 shared:
+    image: node:4
     environment:
         NODE_TAG: latest
 
@@ -28,7 +29,6 @@ jobs:
             - ~commit
 
     publish:
-        image: node:4
         steps:
             - publish: npm publish
         secrets:
@@ -36,12 +36,22 @@ jobs:
         requires:
             - first
 
+    setup-prod:
+        steps:
+            - announce: set banner
+
+    teardown-prod:
+        steps:
+            - publish_blog: publish blog
+
 stages:
     canary:
         jobs:
             - first
         description: "Canary jobs for testing"
     prod:
+        setup: setup-prod
+        teardown: teardown-prod
         jobs:
             - publish
         description: "Prod deploy jobs"

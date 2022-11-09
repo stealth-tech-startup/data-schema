@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const Regex = require('../config/regex');
+const jobId = require('./job').base.extract('id');
 
 const MODEL = {
     id: Joi.number()
@@ -22,14 +23,12 @@ const MODEL = {
         .example('deploy'),
 
     jobIds: Joi.array()
-        .items(
-            Joi.number()
-                .integer()
-                .positive()
-                .description('Identifier for this job')
-                .example(123345)
-        )
+        .items(jobId)
         .description('Job IDs in this Stage'),
+
+    setupJobId: jobId.description('Job ID for Stage setup'),
+
+    teardownJobId: jobId.description('Job ID for Stage teardown'),
 
     description: Joi.string()
         .max(256)

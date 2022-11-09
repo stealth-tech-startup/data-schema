@@ -45,9 +45,12 @@ const SCHEMA_CHILD_PIPELINES = Joi.object()
 const SCHEMA_STAGE = Joi.object()
     .keys({
         description: Joi.string(),
+        setup: Job.jobName,
+        teardown: Job.jobName,
         jobs: Joi.array()
             .items(Job.jobName)
             .min(0)
+            .required()
     })
     .unknown(false);
 
